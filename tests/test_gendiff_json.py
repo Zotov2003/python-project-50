@@ -1,5 +1,5 @@
 import pytest
-import hexlet_code.gendiff as a
+from hexlet_code.gendiff import generate_diff
 
 @pytest.fixture
 def file1_path():
@@ -15,11 +15,11 @@ def test_generate_diff(file1_path, file2_path):
   + timeout: 20
   + verbose: true
 }"""
-    assert a.generate_diff(file1_path, file2_path).strip() == expected.strip()
+    assert generate_diff(file1_path, file2_path).strip() == expected.strip()
 
 def test_identical_files(file1_path):
     # Тест на идентичные файлы
-    assert a.generate_diff(file1_path, file1_path).strip() == "{}"
+    assert generate_diff(file1_path, file1_path).strip() == "{}"
 
 def test_empty_and_non_empty_files():
     # Пример для пустого файла и файла с данными
@@ -33,4 +33,4 @@ def test_empty_and_non_empty_files():
   - host: hexlet.io
 }"""
     
-    assert a.generate_diff(empty_file_path, filled_file_path).strip() == expected.strip()
+    assert generate_diff(empty_file_path, filled_file_path).strip() == expected.strip()
