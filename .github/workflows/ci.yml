@@ -62,3 +62,9 @@ jobs:
          - name: Run tests
            run: |
              pytest tests/test_gendiff_json.py
+             
+        - name: Send coverage to CodeClimate
+          env:
+            CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
+          run: |
+            codeclimate-test-reporter send
