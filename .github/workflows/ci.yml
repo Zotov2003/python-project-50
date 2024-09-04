@@ -1,46 +1,34 @@
 name: CI
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-
+    
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setting up Python
+        uses: actions/setup-python@v2
         with:
           python-version: '3.12'
-
-      - name: Install Poetry
-        run: |
-          curl -sSL https://install.python-poetry.org | python3 -
-
-      - name: Update lock file if needed
-        run: |
-          poetry lock --no-update
-
+      
       - name: Install dependencies
         run: |
-          make install
+          pip install -r requirements.txt
+          pip install codeclimate-test-reporter
 
       - name: Run linter and pytest
         run: |
           make check
 
-      - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v5.0.0
-        if: github.ref_name == 'main'
+      - name: Run tests with coverage
+        run: |
+          pytest --cov=hexlet_code tests/ --cov-report=lcov > coverage.info
+      - name: Upload coverage to CodeClimate
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageCommand: make test-coverage
-          debug: true
+          CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
+        run: |
+          codeclimate-test-reporter upload-coverage coverage.info
