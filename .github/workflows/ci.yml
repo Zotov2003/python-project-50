@@ -37,7 +37,7 @@ jobs:
           make check
 
       - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v5.0.0
+        uses: Zotov2003/codeclimate-action@v5.0.0
         if: github.ref_name == 'main'
         env:
           CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
