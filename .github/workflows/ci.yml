@@ -44,27 +44,3 @@ jobs:
         with:
           coverageCommand: make test-coverage
           debug: true
-     test:
-       runs-on: ubuntu-latest
-       steps:
-         - name: Checkout code
-           uses: actions/checkout@v2
-         
-         - name: Set up Python
-           uses: actions/setup-python@v2
-           with:
-             python-version: '3.10.12'  
-         
-         - name: Install dependencies
-           run: |
-             make install
-         
-         - name: Run tests
-           run: |
-             pytest tests/test_gendiff_json.py
-             
-        - name: Send coverage to CodeClimate
-          env:
-            CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
-          run: |
-            codeclimate-test-reporter send
