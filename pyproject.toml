@@ -5,7 +5,7 @@ description = ""
 authors = ["Максим Порошин <baiter159159@gmail.com>"]
 readme = "README.md"
 packages = [
-  { include = "hexlet_code" },
+  { include = "gendiff" },
 ]
 
 [tool.poetry.dependencies]
