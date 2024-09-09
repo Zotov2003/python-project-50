@@ -31,63 +31,60 @@ import yaml
     return diff_str
 """
 
-def build_diff(dict1, dict2):
-    differences = {}
-    all_keys = dict1.keys() | dict2.keys()
+def load_json(file_path):
+    with open(file_path, 'r') as file:
+        return json.load(file)
 
-    for key in sorted(all_keys):
-        if key in dict1 and key not in dict2:
-            differences[key] = {"status": "removed", "value": dict1[key]}
-        elif key in dict2 and key not in dict1:
-            differences[key] = {"status": "added", "value": dict2[key]}
+def load_yaml(file_path):
+    with open(file_path, 'r') as file:
+        return yaml.safe_load(file)
+    
+def diff_build(data1, data2):
+    diff = {}
+    for key in set(data1.keys()).union(data2.keys()):
+        if key not in data1:
+            diff[key] = {'type': 'added', 'value': data2[key]}
+        elif key not in data2:
+            diff[key] = {'type': 'removed', 'value': data1[key]}
+        elif data1[key] != data2[key]:
+            diff[key] = {
+                'type': 'changed',
+                'old_value': data1[key],
+                'new_value': data2[key],
+            }
         else:
-            if isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
-                # Если оба значения словари, рекурсивно ищем разницу
-                children = build_diff(dict1[key], dict2[key])
-                differences[key] = {"status": "nested", "children": children}
-            elif dict1[key] != dict2[key]:
-                differences[key] = {
-                    "status": "changed",
-                    "old_value": dict1[key],
-                    "new_value": dict2[key]
-                }
-            else:
-                differences[key] = {"status": "unchanged", "value": dict1[key]}
-
-    return differences
+            diff[key] = {'type': 'unchanged', 'value': data1[key]}
+    return diff
 
 def format_stylish(diff, depth=0):
-    indent = ' ' * (depth * 4)
-    formatted_lines = []
-
+    indent = '    ' * depth  # Определяем отступ
+    lines = []
     for key, value in diff.items():
-        if value["status"] == "added":
-            formatted_lines.append(f"{indent}+ {key}: {value['value']}")
-        elif value["status"] == "removed":
-            formatted_lines.append(f"{indent}- {key}: {value['value']}")
-        elif value["status"] == "changed":
-            formatted_lines.append(f"{indent}- {key}: {value['old_value']}")
-            formatted_lines.append(f"{indent}+ {key}: {value['new_value']}")
-        elif value["status"] == "nested":
-            formatted_lines.append(f"{indent}  {key}:")
-            formatted_lines.append(format_stylish(value["children"], depth + 1))
-        elif value["status"] == "unchanged":
-            formatted_lines.append(f"{indent}  {key}: {value['value']}")
+        if value['type'] == 'added':
+            lines.append(f"{indent}+ {key}: {value['value']}")
+        elif value['type'] == 'removed':
+            lines.append(f"{indent}- {key}: {value['value']}")
+        elif value['type'] == 'changed':
+            lines.append(f"{indent}- {key}: {value['old_value']}")
+            lines.append(f"{indent}+ {key}: {value['new_value']}")
+        else:  # 'unchanged'
+            lines.append(f"{indent}  {key}: {value['value']}")
+    return '\n'.join(lines)
 
-    return "\n".join(formatted_lines)
+def generate_diff(file1, file2):
+    if file1.endswith('.json'):
+        data1 = load_json(file1)
+    elif file1.endswith('.yaml'):
+        data1 = load_yaml(file1)
+    else:
+        raise ValueError("Unsupported file format for the first file.")
 
-def generate_diff(filepath1, filepath2):
-    with open(filepath1) as f1, open(filepath2) as f2:
-        dict1 = load_file(filepath1)
-        dict2 = load_file(filepath2)
-        
-    differences = build_diff(dict1, dict2)
-    return format_stylish(differences)
+    if file2.endswith('.json'):
+        data2 = load_json(file2)
+    elif file2.endswith('.yaml'):
+        data2 = load_yaml(file2)
+    else:
+        raise ValueError("Unsupported file format for the second file.")
 
-def load_file(filepath):
-    if filepath.endswith('.json'):
-        with open(filepath) as f:
-            return json.load(f)
-    elif filepath.endswith('.yaml') or filepath.endswith('.yml'):
-        with open(filepath) as f:
-            return yaml.safe_load(f)
+    diff = diff_build(data1, data2)
+    return format_stylish(diff)
