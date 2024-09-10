@@ -85,7 +85,6 @@ def format_stylish(diff, indent=2):
 
 
 def generate_diff(file_path1, file_path2, format_name='stylish'):
-    import json
     
     with open(file_path1, 'r') as file1, open(file_path2, 'r') as file2:
         data1 = json.load(file1)
@@ -95,3 +94,31 @@ def generate_diff(file_path1, file_path2, format_name='stylish'):
     
     if format_name == 'stylish':
         return format_stylish(diff)
+    elif format_name == 'plain':
+        return format_plain(diff)
+    
+
+#plain
+
+def format_plain(diff, parent=''):
+    lines = []
+    
+    for key, value in diff.items():
+        # Формируем текущий путь
+        full_key = f"{parent}.{key}" if parent else key
+        
+        if isinstance(value, dict):
+            # Если значение - словарь, рекурсивно обрабатываем его
+            lines.extend(format_plain(value, full_key))
+        else:
+            # Обрабатываем статусы
+            if isinstance(value, str) and value.startswith('+'):
+                lines.append(f"Property '{full_key}' was added with value: {value[1:].strip()}")
+            elif isinstance(value, str) and value.startswith('-'):
+                lines.append(f"Property '{full_key}' was removed")
+            elif isinstance(value, str) and value.startswith(' '):
+                lines.append(f"Property '{full_key}' was unchanged")
+            else:
+                lines.append(f"Property '{full_key}' has an unexpected format")
+
+    return lines
