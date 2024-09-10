@@ -63,28 +63,28 @@ def test_generate_diff(file1_path, file2_path):
 
 def test_identical_files(file1_path):
     expected = """{
-  "common": {
-    "setting1": "Value 1",
-    "setting2": 200,
-    "setting3": true,
-    "setting6": {
-      "key": "value",
-      "doge": {
-        "wow": ""
+  common: {
+    setting1: Value 1
+    setting2: 200
+    setting3: True
+    setting6: {
+      doge: {
+        wow:
       }
+      key: value
     }
-  },
-  "group1": {
-    "baz": "bas",
-    "foo": "bar",
-    "nest": {
-      "key": "value"
+  }
+  group1: {
+    baz: bas
+    foo: bar
+    nest: {
+      key: value
     }
-  },
-  "group2": {
-    "abc": 12345,
-    "deep": {
-      "id": 45
+  }
+  group2: {
+    abc: 12345
+    deep: {
+      id: 45
     }
   }
 }"""
@@ -92,28 +92,28 @@ def test_identical_files(file1_path):
 
 def test_one_empty_file(empty_path, file1_path):
     expected = """{
-  "common": {
-    "setting1": "Value 1",
-    "setting2": 200,
-    "setting3": true,
-    "setting6": {
-      "key": "value",
-      "doge": {
-        "wow": ""
+  + common: {
+    setting1: Value 1
+    setting2: 200
+    setting3: True
+    setting6: {
+      key: value
+      doge: {
+        wow:
       }
     }
-  },
-  "group1": {
-    "baz": "bas",
-    "foo": "bar",
-    "nest": {
-      "key": "value"
+  }
+  + group1: {
+    baz: bas
+    foo: bar
+    nest: {
+      key: value
     }
-  },
-  "group2": {
-    "abc": 12345,
-    "deep": {
-      "id": 45
+  }
+  + group2: {
+    abc: 12345
+    deep: {
+      id: 45
     }
   }
 }"""
