@@ -52,7 +52,7 @@ def build_diff(data1, data2):
 
     return diff
 
-def format_stylish(diff, indent=2):
+def format_stylish(diff, indent=4, left = 2):
     def stylish_value(value, depth):
         if isinstance(value, dict):
             items = [f'{indent_str(depth + 1)}{k}: {stylish_value(v, depth + 1)}' for k, v in value.items()]
@@ -61,7 +61,7 @@ def format_stylish(diff, indent=2):
             return value
 
     def indent_str(depth):
-        return ' ' * (depth * indent)
+        return ' ' * (depth * indent - left)
 
     def stylish(diff_item, depth):
         lines = []
@@ -71,13 +71,14 @@ def format_stylish(diff, indent=2):
             elif node['status'] == 'removed':
                 lines.append(f'{indent_str(depth - 1)}  - {key}: {stylish_value(node["value"], depth)}')
             elif node['status'] == 'unchanged':
-                lines.append(f'{indent_str(depth)}{key}: {stylish_value(node["value"], depth)}')
+                lines.append(f'{indent_str(depth + 1)}{key}: {stylish_value(node["value"], depth)}')
             elif node['status'] == 'changed':
                 lines.append(f'{indent_str(depth - 1)}  - {key}: {stylish_value(node["old_value"], depth)}')
                 lines.append(f'{indent_str(depth - 1)}  + {key}: {stylish_value(node["new_value"], depth)}')
             elif node['status'] == 'nested':
                 nested_lines = stylish(node['children'], depth + 1)
                 lines.append(f'{indent_str(depth)}{key}: {{\n{nested_lines}\n{indent_str(depth)}}}')
+
 
         return '\n'.join(lines)
 
@@ -95,30 +96,52 @@ def generate_diff(file_path1, file_path2, format_name='stylish'):
     if format_name == 'stylish':
         return format_stylish(diff)
     elif format_name == 'plain':
-        return format_plain(diff)
+        out = format_plain(diff)
+        out_line = output = "\n".join(out)
+        return out_line
     
 
 #plain
-
 def format_plain(diff, parent=''):
     lines = []
-    
+
     for key, value in diff.items():
         # Формируем текущий путь
         full_key = f"{parent}.{key}" if parent else key
-        
-        if isinstance(value, dict):
-            # Если значение - словарь, рекурсивно обрабатываем его
-            lines.extend(format_plain(value, full_key))
-        else:
-            # Обрабатываем статусы
-            if isinstance(value, str) and value.startswith('+'):
-                lines.append(f"Property '{full_key}' was added with value: {value[1:].strip()}")
-            elif isinstance(value, str) and value.startswith('-'):
-                lines.append(f"Property '{full_key}' was removed")
-            elif isinstance(value, str) and value.startswith(' '):
-                lines.append(f"Property '{full_key}' was unchanged")
-            else:
-                lines.append(f"Property '{full_key}' has an unexpected format")
+
+        if value['status'] == 'added':
+            # Если свойство добавлено, указываем его значение
+            value_str = convert_value(value['value'])
+            lines.append(f"Property '{full_key}' was added with value: {value_str}")
+
+        elif value['status'] == 'removed':
+            # Если свойство удалено
+            lines.append(f"Property '{full_key}' was removed")
+
+        elif value['status'] == 'changed':
+            # Если свойство изменилось
+            old_value_str = convert_value(value['old_value'])
+            new_value_str = convert_value(value['new_value'])
+            lines.append(f"Property '{full_key}' was updated. From {old_value_str} to {new_value_str}")
+
+        elif value['status'] == 'nested':
+            # Если свойство вложенное, рекурсивно обрабатываем его
+            lines.extend(format_plain(value['children'], full_key))
+
+        elif value['status'] == 'unchanged':
+            # Если свойство не изменилось, пропускаем его
+            continue
 
     return lines
+
+def convert_value(value):
+    if value is True:
+        return 'true'
+    elif value is False:
+        return 'false'
+    elif value is None:
+        return 'null'
+    elif isinstance(value, (list, dict)):
+        return '[complex value]'
+    else:
+        return value
