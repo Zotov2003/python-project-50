@@ -23,7 +23,7 @@ def format_stylish(diff, indent=4, left = 2):
                 lines.append(f'{indent_str(depth - 1)}  + {key}: {stylish_value(node["new_value"], depth)}')
             elif node['status'] == 'nested':
                 nested_lines = stylish(node['children'], depth + 1)
-                lines.append(f'{indent_str(depth)}{key}: {{\n{nested_lines}\n{indent_str(depth)}}}')
+                lines.append(f'{indent_str(depth+2)}{key}: {{\n{nested_lines}\n{indent_str(depth)}}}')
 
 
         return '\n'.join(lines)

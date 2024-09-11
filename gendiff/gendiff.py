@@ -99,9 +99,9 @@ def generate_diff(file_path1, file_path2, format_name='stylish'):
     if format_name == 'stylish':
         return format_stylish(diff)
     elif format_name == 'plain':
-        out = format_plain(diff)
-        out_line = output = "\n".join(out)
-        return out_line
+        format = format_plain(diff)
+        return "\n".join(format)
+       
     elif format_name == 'json':
         return format_json(diff)
     
