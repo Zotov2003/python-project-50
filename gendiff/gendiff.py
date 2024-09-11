@@ -1,6 +1,8 @@
 import json
-import yaml
 
+from gendiff.formatters.stylish import format_stylish
+from gendiff.formatters.plain import format_plain
+from gendiff.formatters.json import format_json
 
 """def generate_diff(filepath1, filepath2):
 
@@ -52,7 +54,8 @@ def build_diff(data1, data2):
 
     return diff
 
-def format_stylish(diff, indent=4, left = 2):
+#stylish
+"""def format_stylish(diff, indent=4, left = 2):
     def stylish_value(value, depth):
         if isinstance(value, dict):
             items = [f'{indent_str(depth + 1)}{k}: {stylish_value(v, depth + 1)}' for k, v in value.items()]
@@ -82,7 +85,7 @@ def format_stylish(diff, indent=4, left = 2):
 
         return '\n'.join(lines)
 
-    return '{\n' + stylish(diff, 1) + '\n}'
+    return '{\n' + stylish(diff, 1) + '\n}'"""
 
 
 def generate_diff(file_path1, file_path2, format_name='stylish'):
@@ -99,10 +102,12 @@ def generate_diff(file_path1, file_path2, format_name='stylish'):
         out = format_plain(diff)
         out_line = output = "\n".join(out)
         return out_line
+    elif format_name == 'json':
+        return format_json(diff)
     
 
 #plain
-def format_plain(diff, parent=''):
+"""def format_plain(diff, parent=''):
     lines = []
 
     for key, value in diff.items():
@@ -144,4 +149,4 @@ def convert_value(value):
     elif isinstance(value, (list, dict)):
         return '[complex value]'
     else:
-        return value
+        return value"""
