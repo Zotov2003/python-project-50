@@ -39,6 +39,6 @@ def convert_value(value):
     if isinstance(value, (list, dict)):
         return '[complex value]'
     return (
-        str(value).lower() if isinstance(value, bool)
+        str(f"{value}").lower() if isinstance(value, bool)
         else f"'{value}'"
     )
