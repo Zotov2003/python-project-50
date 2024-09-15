@@ -38,4 +38,7 @@ def convert_value(value):
         return 'null'
     if isinstance(value, (list, dict)):
         return '[complex value]'
-    return str(value).lower() if isinstance(value, bool) else str(f"'{value}'")
+    return (
+        str(value).lower() if isinstance(value, bool)
+        else f"'{value}'"
+    )
