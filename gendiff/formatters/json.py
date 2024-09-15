@@ -2,5 +2,4 @@ import json
 
 
 def format_json(diff):
-    # Форматируем с отступами для удобства чтения
-    return json.dumps(diff, indent=4) 
+    return json.dumps(diff, indent=4)
