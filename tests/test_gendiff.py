@@ -34,7 +34,7 @@ def load_expected(file_name):
         ('file3.json', 'file3.json', 'stylish', 'result_identical_files_stylish.txt'),
         ('empty.json', 'file3.json', 'stylish', 'result_one_empty_file_stylish.txt'),
         ('empty.json', 'empty.json', 'stylish', 'result_both_empty_files_stylish.txt'),
-        ('file1.json', 'file2.json', 'plain', 'result_generate_diff_plain.txt'),#
+        ('file1.json', 'file2.json', 'plain', 'result_generate_diff_plain.txt'),
         ('file4.json', 'file4.json', 'plain', 'result_identical_files_plain.txt'),
         ('file1.json', 'empty.json', 'plain', 'result_one_file_empty_plain.txt'),
         ('empty.json', 'empty.json', 'plain', 'result_both_files_empty_plain.txt'),
@@ -50,7 +50,6 @@ def load_expected(file_name):
         ('empty.yml', 'empty.yml', 'plain', 'result_both_files_empty_plain.txt'),
         ('file1.yml', 'file4.yml', 'json', 'result_different_files_json.txt'),
         ('empty.yml', 'file4.yml', 'json', 'result_one_empty_file_json.txt'),
-        #('file1.json', 'file2.json', 'stylish', 'result_generate_diff_stylish.txt')
     ]
 )
 def test_generate_diff(file1, file2, formatting, expected_file):
