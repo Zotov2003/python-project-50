@@ -57,4 +57,3 @@ def test_generate_diff(file1, file2, formatting, expected_file):
     file2_path = f'tests/fixtures/{file2}'
     expected = load_expected(expected_file)
     assert generate_diff(file1_path, file2_path, formatting) == expected
-
