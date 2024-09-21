@@ -11,15 +11,15 @@
 
 Пример использования gendiff file1.json file2.json
 Результат строится на основе того, как изменилось содержимое во втором файле относительно первого. Ключи выводятся в алфавитном порядке.
-https://asciinema.org/a/SYXNX0HGW2kFu4llUK9MSWdpi
+[![asciicast](https://asciinema.org/a/676862.svg)](https://asciinema.org/a/676862)
 
 Пример использования gendiff --format plain file1.json file2.json
 Текст отражает ситуацию, словно мы объединили второй объект с первым
-https://asciinema.org/a/jQOytMKRC2muM89CSohkF2CMN
+[![asciicast](https://asciinema.org/a/676863.svg)](https://asciinema.org/a/676863)
 
 Пример использования gendiff --format json filepath1.json filepath2.json
 Показывает вывод в структурированном формате json
-https://asciinema.org/a/N95nIFHCEcSQM0v1OQ8tm5dx0
+[![asciicast](https://asciinema.org/a/676864.svg)](https://asciinema.org/a/676864)
 
 This project was built using these tools:
 
