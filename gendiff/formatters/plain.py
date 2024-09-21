@@ -1,4 +1,5 @@
 def format_plain(diff, parent=''):
+    """Formatting the output of the diff with plain formatter"""
     lines = []
     for key, value in diff.items():
         full_key = f"{parent}.{key}" if parent else key
@@ -19,21 +20,25 @@ def handle_status(value, full_key):
 
 
 def handle_added(full_key, value):
+    """Helper function to process added keys"""
     return [
         f"Property '{full_key}' was added with value: {convert_value(value)}"]
 
 
 def handle_removed(full_key):
+    """Helper function to process removed keys"""
     return [f"Property '{full_key}' was removed"]
 
 
 def handle_changed(full_key, old_value, new_value):
+    """Helper function to process changed keys"""
     return ["Property '{}' was updated. From {} to {}".format(
         full_key, convert_value(old_value), convert_value(new_value)
     )]
 
 
 def convert_value(value):
+    """Formatting the output of the diff"""
     if value is None:
         return 'null'
     if isinstance(value, (list, dict)):

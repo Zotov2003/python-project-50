@@ -1,4 +1,5 @@
 def build_diff(data1, data2):
+    """Getting the difference between two files"""
     keys = sorted(data1.keys() | data2.keys())
     diff = {}
 
@@ -9,6 +10,7 @@ def build_diff(data1, data2):
 
 
 def process_key(key, data1, data2):
+    """Sorting keys"""
     if key not in data1:
         return {'status': 'added', 'value': data2[key]}
     elif key not in data2:
@@ -24,6 +26,7 @@ def process_key(key, data1, data2):
 
 
 def handle_nested_diff(key, nested1, nested2):
+    """Processing of nested data"""
     children_diff = build_diff(nested1, nested2)
     return {
         'status': 'nested',

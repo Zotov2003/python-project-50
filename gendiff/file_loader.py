@@ -22,5 +22,6 @@ def load_file(file_path):
 
 
 def getting_extension(file_path):
+    """Extension Processing"""
     _, ext = os.path.splitext(file_path)
     return ext

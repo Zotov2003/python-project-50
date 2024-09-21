@@ -1,8 +1,10 @@
 def format_stylish(diff, indent=4):
+    """Formatting the output of the diff with stylish formatter"""
     return '{\n' + stylish(diff, 1) + '\n}'
 
 
 def stylish_value(value, depth):
+    """Formatting the output of the diff"""
     if isinstance(value, dict):
         return format_dict(value, depth)
     elif value is True:
@@ -46,6 +48,7 @@ def stylish(diff_item, depth):
 
 
 def stylish_added(key, node, depth):
+    """Helper function to process added keys"""
     return (
         f"{indent_str(depth - 1)}  + {key}: "
         f"{stylish_value(node['value'], depth)}"
@@ -53,6 +56,7 @@ def stylish_added(key, node, depth):
 
 
 def stylish_removed(key, node, depth):
+    """Helper function to process removed keys"""
     return (
         f"{indent_str(depth - 1)}  - {key}: "
         f"{stylish_value(node['value'], depth)}"
@@ -60,6 +64,7 @@ def stylish_removed(key, node, depth):
 
 
 def stylish_unchanged(key, node, depth):
+    """Helper function to process unchanged keys"""
     return (
         f"{indent_str(depth)}{key}: "
         f"{stylish_value(node['value'], depth)}"
@@ -67,6 +72,7 @@ def stylish_unchanged(key, node, depth):
 
 
 def stylish_changed(key, node, depth):
+    """Helper function to process changed keys"""
     old_line = (
         f"{indent_str(depth - 1)}  - {key}: "
         f"{stylish_value(node['old_value'], depth)}"
@@ -79,6 +85,7 @@ def stylish_changed(key, node, depth):
 
 
 def stylish_nested(key, node, depth):
+    """Helper function to process nested nodes (children)"""
     nested_lines = stylish(node['children'], depth + 1)
     return (
         f"{indent_str(depth)}{key}: "
