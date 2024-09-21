@@ -3,7 +3,7 @@ import yaml
 import os
 
 
-def parse_content(file_path ,content):
+def parse_content(file_path, content):
     ext = getting_extension(file_path)
     if ext == '.json':
         return json.loads(content)
@@ -18,8 +18,8 @@ def load_file(file_path):
     # _, ext = os.path.splitext(file_path)
     with open(file_path, 'r') as file:
         content = file.read()
-        return parse_content(file_path ,content)
-    
+        return parse_content(file_path, content)
+
 
 def getting_extension(file_path):
     _, ext = os.path.splitext(file_path)

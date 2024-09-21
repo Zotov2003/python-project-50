@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "hexlet-code"
 version = "0.1.0"
-description = ""
+description = "a tool for comparing configuration files"
 authors = ["Максим Порошин <baiter159159@gmail.com>"]
 readme = "README.md"
 packages = [
