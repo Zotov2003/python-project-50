@@ -7,6 +7,7 @@ def load_expected(file_name):
     with open(f'tests/fixtures/{file_name}', 'r') as file:
         return file.read().strip()
 
+
 @pytest.mark.parametrize(
     "file1, file2, formatting, expected_file",
     [
@@ -38,10 +39,12 @@ def test_generate_diff(file1, file2, formatting, expected_file):
     expected = load_expected(expected_file)
     assert generate_diff(file1_path, file2_path, formatting) == expected
 
+
 def test_unsupported_file_extension():
     with pytest.raises(Exception) as exc_info:
         process_file('test.docx', 'json')
     assert str(exc_info.value) == "Неподдерживаемое расширение файла."
+
 
 def test_nonexistent_formatter():
     with pytest.raises(Exception) as exc_info:
