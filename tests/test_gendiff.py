@@ -1,31 +1,11 @@
 import pytest
 from gendiff.gendiff import generate_diff
-
-
-@pytest.fixture
-def file1_path():
-    return 'tests/fixtures/file1.json'
-
-
-@pytest.fixture
-def file2_path():
-    return 'tests/fixtures/file2.json'
-
-
-@pytest.fixture
-def file1_path_y():
-    return 'tests/fixtures/file1.yml'
-
-
-@pytest.fixture
-def file2_path_y():
-    return 'tests/fixtures/file2.yml'
+from tests.process_file import process_file
 
 
 def load_expected(file_name):
     with open(f'tests/fixtures/{file_name}', 'r') as file:
         return file.read().strip()
-
 
 @pytest.mark.parametrize(
     "file1, file2, formatting, expected_file",
@@ -57,3 +37,13 @@ def test_generate_diff(file1, file2, formatting, expected_file):
     file2_path = f'tests/fixtures/{file2}'
     expected = load_expected(expected_file)
     assert generate_diff(file1_path, file2_path, formatting) == expected
+
+def test_unsupported_file_extension():
+    with pytest.raises(Exception) as exc_info:
+        process_file('test.docx', 'json')
+    assert str(exc_info.value) == "Неподдерживаемое расширение файла."
+
+def test_nonexistent_formatter():
+    with pytest.raises(Exception) as exc_info:
+        process_file('test.json', 'pdf')
+    assert str(exc_info.value) == "Выбранный форматер не существует."

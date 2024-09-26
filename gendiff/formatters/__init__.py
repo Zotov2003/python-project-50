@@ -7,7 +7,6 @@ def choosing_formatter(diff, format_name='stylish'):
     if format_name == 'stylish':
         return format_stylish(diff)
     elif format_name == 'plain':
-        format = format_plain(diff)
-        return "\n".join(format)
+        return format_plain(diff)
     elif format_name == 'json':
         return format_json(diff)

@@ -4,7 +4,7 @@ import os
 
 
 def parse_content(file_path, content):
-    ext = getting_extension(file_path)
+    ext = get_extension(file_path)
     if ext == '.json':
         return json.loads(content)
     elif ext in ['.yml', '.yaml']:
@@ -21,7 +21,7 @@ def load_file(file_path):
         return parse_content(file_path, content)
 
 
-def getting_extension(file_path):
+def get_extension(file_path):
     """Extension Processing"""
     _, ext = os.path.splitext(file_path)
     return ext
